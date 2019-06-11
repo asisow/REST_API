@@ -8,7 +8,7 @@ exports.getPosts = (req, res, next) => {
     Post
         .find()
         .then(posts => {
-            console.log('HOOOOOOOOOOOORAAAAAAH!', posts);
+            console.log(posts);
             res.status(200).json({
                 message: 'fetched posts successfully',
                 posts: posts
@@ -36,7 +36,7 @@ exports.createPost = (req, res, next) => {
     const post = new Post({
         title: title,
         content: content,
-        imageUrl: 'images/385484.jpg',
+        imageUrl: 'images/duck.jpg',
         creator: {
             name: 'Asisow'
         },
