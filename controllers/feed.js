@@ -73,3 +73,11 @@ exports.getPost = (req, res, next) => {
       next(err);
     })
 };
+
+exports.updatePost = (req, res, next) => {
+  const postId = req.params.postId;
+  const title = req.body.title;
+  const content = req.body.content;
+  const image = req.body.image;
+  if (!image) 
+}
