@@ -1,7 +1,13 @@
 const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
-    const token = req.get('Authorization').split(' ')[1];
+    const head = req.get('Authorization');
+    if (!head) {
+        const error = new Error('Not authenticated');
+        error.statusCode = 401;
+        throw error;
+    }
+    const token = head.split(' ')[1];
     let decodedToken;
     try {
         decodedToken = jwt.verify(token, 'secret');
@@ -15,4 +21,5 @@ module.exports = (req, res, next) => {
         throw error;
     }
     req.userId = decodedToken.userId;
+    next();
 };
