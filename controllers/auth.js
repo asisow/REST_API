@@ -64,8 +64,8 @@ exports.login = async (req, res, next) => {
             throw error;
         }
         const token = jwt.sign({
-            email: loadedUser.email,
-            userId: loadedUser._id.toString()
+            email: user.email,
+            userId: user._id.toString()
         },
             'secret',
             { expiresIn: '1h' });

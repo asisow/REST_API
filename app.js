@@ -59,7 +59,7 @@ mongoose
     .connect(MONGODB_URI, { useNewUrlParser: true })
     .then(() => {
         const server = app.listen(8080, () => console.log('Goliath online'));
-        const io = require('socket.io')(server);
+        const io = require('./socket').init(server);
         io.on('connection', socket => {
             console.log('Client connected');
         });
