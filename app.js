@@ -1,11 +1,22 @@
+const path = require('path');
+const fs = require('fs');
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-const path = require('path');
 const multer = require('multer');
+const helmet = require('helmet');
+const compression = require('compression');
+const morgan = require('morgan');
+require('dotenv').config();
 
-const MONGODB_URI = 'mongodb://localhost:27017/REST';
-
+const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@node-complete-course-n3xjw.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
+console.log(process.env.MONGO_USER)
+// if (!process.env.MONGO_USER && !process.env.MONGO_PASSWORD && !process.env.MONGO_DB) {
+//     const error = new Error;
+//     error.text = 'not enough env variables provided';
+//     throw error;
+// };
 const fileStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'images');
@@ -44,6 +55,15 @@ app.use((req, res, next) => {
     next();
 });
 
+const accessLogStream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'), 
+    { flags: 'a'}
+);
+
+app.use(helmet());
+app.use(compression());
+app.use(morgan('combined', { stream: accessLogStream }));
+
 app.use('/feed', feedRoutes);
 app.use('/auth', authRoutes);
 
@@ -56,9 +76,9 @@ app.use((error, req, res, next) => {
 })
 
 mongoose
-    .connect(MONGODB_URI, { useNewUrlParser: true })
+    .connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then(() => {
-        const server = app.listen(8080, () => console.log('Goliath online'));
+        const server = app.listen(process.env.PORT || 8080, () => console.log('Goliath online'));
         const io = require('./socket').init(server);
         io.on('connection', socket => {
             console.log('Client connected');
