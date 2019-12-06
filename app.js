@@ -11,7 +11,7 @@ const morgan = require('morgan');
 require('dotenv').config();
 
 const MONGODB_URI = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@node-complete-course-n3xjw.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`;
-console.log(process.env.MONGO_USER)
+
 // if (!process.env.MONGO_USER && !process.env.MONGO_PASSWORD && !process.env.MONGO_DB) {
 //     const error = new Error;
 //     error.text = 'not enough env variables provided';
